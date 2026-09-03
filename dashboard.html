@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>VN30 News Radar</title>
+<style>
+  :root {
+    --jade-900: #0a2420;
+    --jade-800: #0f3d3e;
+    --jade-700: #154a45;
+    --gold: #d4af37;
+    --gold-soft: #e8cf7a;
+    --text-main: #eef3f1;
+    --text-muted: #9aa5a3;
+    --border: rgba(212,175,55,0.18);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: linear-gradient(160deg, var(--jade-900), var(--jade-800) 70%);
+    color: var(--text-main);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding: 32px 24px 64px;
+  }
+  .header {
+    max-width: 1100px;
+    margin: 0 auto 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+  .header h1 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    color: var(--gold-soft);
+    font-weight: 600;
+  }
+  .header .updated { color: var(--text-muted); font-size: 13px; }
+
+  .regime-banner {
+    max-width: 1100px;
+    margin: 0 auto 28px;
+    padding: 20px 24px;
+    border-radius: 14px;
+    background: rgba(62,207,142,0.12);
+    border: 1px solid #3ecf8e55;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .regime-label {
+    font-size: 20px;
+    font-weight: 700;
+    color: #3ecf8e;
+    letter-spacing: 0.5px;
+  }
+  .regime-sub { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+  .regime-score { font-size: 32px; font-weight: 700; color: var(--text-main); }
+
+  .sparkline-wrap {
+    max-width: 1100px;
+    margin: 0 auto 32px;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .sparkline-wrap .label { color: var(--text-muted); font-size: 12px; margin-bottom: 8px; }
+
+  .grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+  .news-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .news-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+  .news-card-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+  .cat-chip {
+    background: rgba(212,175,55,0.15);
+    color: var(--gold-soft);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .sent-chip { font-weight: 600; }
+  .region-chip {
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 20px;
+  }
+  .time-ago { color: var(--text-muted); margin-left: auto; }
+  .news-title { font-size: 14.5px; font-weight: 600; line-height: 1.4; margin-bottom: 6px; }
+  .news-summary { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px; }
+  .news-card-bottom {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .ticker-chip {
+    background: rgba(255,255,255,0.06);
+    padding: 1px 7px;
+    border-radius: 6px;
+    color: var(--gold-soft);
+    font-weight: 600;
+  }
+  .empty-state {
+    color: var(--text-muted);
+    text-align: center;
+    padding: 60px 20px;
+    grid-column: 1 / -1;
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>VN30 · News Radar</h1>
+    <div class="updated">Cap nhat luc 05:04 03/09/2026</div>
+  </div>
+
+  <div class="regime-banner">
+    <div>
+      <div class="regime-label">XANH - ON DINH</div>
+      <div class="regime-sub">35 tin trong 24 gio gan nhat</div>
+    </div>
+    <div class="regime-score">1.5</div>
+  </div>
+
+  <div class="sparkline-wrap">
+    <div class="label">Xu huong diem rui ro macro (lich su gan nhat)</div>
+    <div style="color:#9aa5a3;font-size:12px;">Chua du du lieu lich su.</div>
+  </div>
+
+  <div class="grid">
+    
+    <a class="news-card" href="https://www.cnbc.com/2026/08/24/canada-us-trade-war-deal.html" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">QT</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">&#x27;They asked too much&#x27;: Canadian dollar slides as Ottawa and Washington head for all-out trade war</div>
+      <div class="news-summary">&#x27;They asked too much&#x27;: Canadian dollar slides as Ottawa and Washington head for all-out trade war</div>
+      <div class="news-card-bottom">
+        <span class="source">CNBC - Markets</span>
+        <span class="ticker-chip">ING</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://www.cnbc.com/2026/08/24/bessent-1-trillion-treasury-general-account-bond-buybacks.html" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">QT</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Bessent could tap near $1 trillion Treasury General Account to fund bond buybacks, sources said</div>
+      <div class="news-summary">Bessent could tap near $1 trillion Treasury General Account to fund bond buybacks, sources said</div>
+      <div class="news-card-bottom">
+        <span class="source">CNBC - Markets</span>
+        <span class="ticker-chip">TGA</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://www.cnbc.com/2026/08/26/feds-preferred-inflation-gauge-shows-core-prices-rose-3point3percent-annually-in-july.html" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">QT</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Fed’s preferred inflation gauge shows core prices rose 3.3% annually in July</div>
+      <div class="news-summary">Fed’s preferred inflation gauge shows core prices rose 3.3% annually in July</div>
+      <div class="news-card-bottom">
+        <span class="source">CNBC - Markets</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://www.cnbc.com/2026/08/27/feds-hammack-says-now-is-the-time-to-act-on-raising-interest-rates.html" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">QT</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Fed&#x27;s Hammack says &#x27;now is the time to act&#x27; on raising interest rates</div>
+      <div class="news-summary">Fed&#x27;s Hammack says &#x27;now is the time to act&#x27; on raising interest rates</div>
+      <div class="news-card-bottom">
+        <span class="source">CNBC - Markets</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://www.cnbc.com/2026/08/28/kevin-warsh-jackson-hole-federal-reserve-inflation.html" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">QT</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Fed Chairman Warsh expresses concern about inflation, advocates for &#x27;quieter&#x27; central bank</div>
+      <div class="news-summary">Fed Chairman Warsh expresses concern about inflation, advocates for &#x27;quieter&#x27; central bank</div>
+      <div class="news-card-bottom">
+        <span class="source">CNBC - Markets</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://www.cnbc.com/2026/09/02/private-payrolls-rose-by-38000-in-august-fewer-than-expected-adp-reports.html" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">QT</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Private payrolls rose by 38,000 in August, less than expected, ADP reports</div>
+      <div class="news-summary">Private payrolls rose by 38,000 in August, less than expected, ADP reports</div>
+      <div class="news-card-bottom">
+        <span class="source">CNBC - Markets</span>
+        <span class="ticker-chip">ADP</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vn.investing.com/news/economic-indicators/gdp-binh-quan-dau-nguoi-viet-nam-vuot-xa-nen-kinh-te-lon-thu-6-the-gioi-2705316" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Du lieu vi mo</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">QT</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">GDP bình quân đầu người Việt Nam vượt xa nền kinh tế lớn thứ 6 thế giới</div>
+      <div class="news-summary">GDP bình quân đầu người Việt Nam vượt xa nền kinh tế lớn thứ 6 thế giới</div>
+      <div class="news-card-bottom">
+        <span class="source">Investing.com - Vietnam</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vn.investing.com/news/stock-market-news/ads-bi-nhac-nho-cham-cong-bo-thong-tin-2705324" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">QT</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">ADS bị nhắc nhở chậm công bố thông tin</div>
+      <div class="news-summary">ADS bị nhắc nhở chậm công bố thông tin</div>
+      <div class="news-card-bottom">
+        <span class="source">Investing.com - Vietnam</span>
+        <span class="ticker-chip">ADS</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vn.investing.com/news/economy-news/8-thang-dau-nam-2026-tong-kim-ngach-xuat-nhap-khau-hang-hoa-dat-77014-ty-usd-2705325" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Du lieu vi mo</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">QT</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">8 tháng đầu năm 2026, tổng kim ngạch xuất, nhập khẩu hàng hóa đạt 770.14 tỷ USD</div>
+      <div class="news-summary">8 tháng đầu năm 2026, tổng kim ngạch xuất, nhập khẩu hàng hóa đạt 770.14 tỷ USD</div>
+      <div class="news-card-bottom">
+        <span class="source">Investing.com - Vietnam</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vnexpress.net/co-nen-gui-tiet-kiem-o-ngan-hang-nho-de-lay-lai-cao-hon-5114873.html" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Có nên gửi tiết kiệm ở ngân hàng nhỏ để lấy lãi cao hơn?</div>
+      <div class="news-summary">Có nên gửi tiết kiệm ở ngân hàng nhỏ để lấy lãi cao hơn?</div>
+      <div class="news-card-bottom">
+        <span class="source">VnExpress - Kinh doanh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vnexpress.net/italy-tim-cach-xuat-khau-ghe-vi-diet-khong-xue-5115777.html" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Du lieu vi mo</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Italy tìm cách xuất khẩu ghẹ vì diệt không xuể</div>
+      <div class="news-summary">Italy tìm cách xuất khẩu ghẹ vì diệt không xuể</div>
+      <div class="news-card-bottom">
+        <span class="source">VnExpress - Kinh doanh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vnexpress.net/pyn-elite-fund-lai-suat-tang-thuc-day-nha-dau-tu-ban-co-phieu-5115764.html" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">PYN Elite Fund: Lãi suất tăng thúc đẩy nhà đầu tư bán cổ phiếu</div>
+      <div class="news-summary">PYN Elite Fund: Lãi suất tăng thúc đẩy nhà đầu tư bán cổ phiếu</div>
+      <div class="news-card-bottom">
+        <span class="source">VnExpress - Kinh doanh</span>
+        <span class="ticker-chip">PYN</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vneconomy.vn/gia-vang-boc-hoi-gan-150-usdoz-sau-bai-phat-bieu-cua-chu-tich-fed.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Giá vàng “bốc hơi” gần 150 USD/oz sau bài phát biểu của Chủ tịch Fed</div>
+      <div class="news-summary">Giá vàng “bốc hơi” gần 150 USD/oz sau bài phát biểu của Chủ tịch Fed</div>
+      <div class="news-card-bottom">
+        <span class="source">VnEconomy - Tai chinh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vneconomy.vn/tu-jackson-hole-chu-tich-fed-phat-tin-hieu-tang-lai-suat.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#e5484d">Tieu cuc</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Từ Jackson Hole, Chủ tịch Fed phát tín hiệu tăng lãi suất</div>
+      <div class="news-summary">Từ Jackson Hole, Chủ tịch Fed phát tín hiệu tăng lãi suất</div>
+      <div class="news-card-bottom">
+        <span class="source">VnEconomy - Tai chinh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vneconomy.vn/ky-vong-lai-suat-fed-co-the-gay-bien-dong-gia-vang-trong-tuan-nay.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Kỳ vọng lãi suất Fed có thể gây biến động giá vàng trong tuần này</div>
+      <div class="news-summary">Kỳ vọng lãi suất Fed có thể gây biến động giá vàng trong tuần này</div>
+      <div class="news-card-bottom">
+        <span class="source">VnEconomy - Tai chinh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vneconomy.vn/tien-lai-no-cong-cua-cac-nuoc-g7-co-the-tang-them-hang-chuc-ty-usd-vi-loi-suat-trai-phieu-leo-thang.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Dia chinh tri</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Tiền lãi nợ công của các nước G7 có thể tăng thêm hàng chục tỷ USD vì lợi suất trái phiếu leo thang</div>
+      <div class="news-summary">Tiền lãi nợ công của các nước G7 có thể tăng thêm hàng chục tỷ USD vì lợi suất trái phiếu leo thang</div>
+      <div class="news-card-bottom">
+        <span class="source">VnEconomy - Tai chinh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vneconomy.vn/moi-lo-lai-suat-tang-day-gia-vang-xuong-day-2-tuan.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Mối lo lãi suất tăng đẩy giá vàng xuống đáy 2 tuần</div>
+      <div class="news-summary">Mối lo lãi suất tăng đẩy giá vàng xuống đáy 2 tuần</div>
+      <div class="news-card-bottom">
+        <span class="source">VnEconomy - Tai chinh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vneconomy.vn/thi-truong-trai-phieu-chinh-phu-toan-cau-lai-ban-thao.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#e5484d">Tieu cuc</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Thị trường trái phiếu chính phủ toàn cầu lại bán tháo</div>
+      <div class="news-summary">Thị trường trái phiếu chính phủ toàn cầu lại bán tháo</div>
+      <div class="news-card-bottom">
+        <span class="source">VnEconomy - Tai chinh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vneconomy.vn/gia-vang-hoi-manh-spdr-gold-trust-mua-rong-10-tan-trong-mot-phien.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Dong von ngoai</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Giá vàng hồi mạnh, SPDR Gold Trust mua ròng 10 tấn trong một phiên</div>
+      <div class="news-summary">Giá vàng hồi mạnh, SPDR Gold Trust mua ròng 10 tấn trong một phiên</div>
+      <div class="news-card-bottom">
+        <span class="source">VnEconomy - Tai chinh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vneconomy.vn/dong-yen-bat-tang-sau-khi-boj-de-ngo-kha-nang-tang-manh-lai-suat.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Đồng yên bật tăng sau khi BOJ để ngỏ khả năng tăng mạnh lãi suất</div>
+      <div class="news-summary">Đồng yên bật tăng sau khi BOJ để ngỏ khả năng tăng mạnh lãi suất</div>
+      <div class="news-card-bottom">
+        <span class="source">VnEconomy - Tai chinh</span>
+        <span class="ticker-chip">BOJ</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://vneconomy.vn/lai-suat-tiet-kiem-ngan-hang-nao-cao-nhat-thang-92026.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Lãi suất tiết kiệm ngân hàng nào cao nhất tháng 9/2026?</div>
+      <div class="news-summary">Lãi suất tiết kiệm ngân hàng nào cao nhất tháng 9/2026?</div>
+      <div class="news-card-bottom">
+        <span class="source">VnEconomy - Tai chinh</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/08/den-thang-8-van-chua-to-chuc-dai-hoi-thuong-nien-drh-holdings-bi-hose-nhac-nho-ve-viec-dam-bao-quyen-loi-co-dong-830-1486501.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#e5484d">Tieu cuc</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Đến tháng 8 vẫn chưa tổ chức đại hội thường niên, DRH Holdings bị HOSE nhắc nhở về việc đảm bảo quyền lợi cổ đông</div>
+      <div class="news-summary">Đến tháng 8 vẫn chưa tổ chức đại hội thường niên, DRH Holdings bị HOSE nhắc nhở về việc đảm bảo quyền lợi cổ đông</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        <span class="ticker-chip">DRH</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/08/chung-khoan-tuan-24-28082026-khoi-ngoai-mua-rong-tro-lai-1636-1486585.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Dong von ngoai</span>
+        <span class="sent-chip" style="color:#3ecf8e">Tich cuc</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Chứng khoán Tuần 24-28/08/2026: Khối ngoại mua ròng trở lại</div>
+      <div class="news-summary">Chứng khoán Tuần 24-28/08/2026: Khối ngoại mua ròng trở lại</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/08/kafi-len-upcom-tu-0909-von-hoa-hon-11-ngan-ty-830-1486801.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Kafi lên UPCoM từ 09/09, vốn hóa hơn 11 ngàn tỷ</div>
+      <div class="news-summary">Kafi lên UPCoM từ 09/09, vốn hóa hơn 11 ngàn tỷ</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        <span class="ticker-chip">KAI</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/08/theo-dau-dong-tien-ca-map-2808-khoi-ngoai-tiep-tuc-mua-rong-tu-doanh-xa-hang-manh-830-1486758.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Dong von ngoai</span>
+        <span class="sent-chip" style="color:#3ecf8e">Tich cuc</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Theo dấu dòng tiền cá mập 28/08: Khối ngoại tiếp tục mua ròng, tự doanh xả hàng mạnh</div>
+      <div class="news-summary">Theo dấu dòng tiền cá mập 28/08: Khối ngoại tiếp tục mua ròng, tự doanh xả hàng mạnh</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/08/vn-index-tang-64-diem-tuan-qua-rieng-vic-ganh-hon-52-diem-830-1486908.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">VN-Index tăng 64 điểm tuần qua, riêng VIC “gánh” hơn 52 điểm</div>
+      <div class="news-summary">VN-Index tăng 64 điểm tuần qua, riêng VIC “gánh” hơn 52 điểm</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        <span class="ticker-chip">VIC</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/08/gia-co-phieu-bien-dong-vi-tin-don-830-1486926.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Giá cổ phiếu biến động vì tin đồn</div>
+      <div class="news-summary">Giá cổ phiếu biến động vì tin đồn</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        <span class="ticker-chip">BNP</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/08/dong-tay-land-sap-giao-dich-80-trieu-cp-tren-upcom-kiem-toan-luu-y-loat-khoan-cong-no-830-1487023.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Đông Tây Land sắp giao dịch 80 triệu cp trên UPCoM, kiểm toán lưu ý loạt khoản công nợ</div>
+      <div class="news-summary">Đông Tây Land sắp giao dịch 80 triệu cp trên UPCoM, kiểm toán lưu ý loạt khoản công nợ</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        <span class="ticker-chip">DTR</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/09/ir-awards-lich-cong-bo-thong-tin-thang-092026-can-nho-830-1473389.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Chinh sach tien te</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">[IR AWARDS] Lịch công bố thông tin tháng 09/2026 cần nhớ</div>
+      <div class="news-summary">[IR AWARDS] Lịch công bố thông tin tháng 09/2026 cần nhớ</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        <span class="ticker-chip">VNM</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/09/tuan-03-04092026-10-co-phieu-nong-duoi-goc-nhin-ptkt-cua-vietstock-585-1486895.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Tuần 03-04/09/2026: 10 cổ phiếu nóng dưới góc nhìn PTKT của Vietstock</div>
+      <div class="news-summary">Tuần 03-04/09/2026: 10 cổ phiếu nóng dưới góc nhìn PTKT của Vietstock</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        <span class="ticker-chip">BMP</span><span class="ticker-chip">BVH</span><span class="ticker-chip">DPM</span><span class="ticker-chip">HDB</span><span class="ticker-chip">SHS</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="http://vietstock.vn/2026/09/ads-bi-nhac-nho-cham-cong-bo-thong-tin-830-1487283.htm" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">ADS bị nhắc nhở chậm công bố thông tin</div>
+      <div class="news-summary">ADS bị nhắc nhở chậm công bố thông tin</div>
+      <div class="news-card-bottom">
+        <span class="source">Vietstock - Chung khoan</span>
+        <span class="ticker-chip">ADS</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://cafef.vn/pmi-nganh-san-xuat-viet-nam-tang-len-533-diem-trong-thang-8-mot-yeu-to-tang-nhanh-nhat-trong-vong-hon-2-nam-tro-lai-day-188260903083316282.chn" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Du lieu vi mo</span>
+        <span class="sent-chip" style="color:#3ecf8e">Tich cuc</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">PMI ngành sản xuất Việt Nam tăng lên 53,3 điểm trong tháng 8, một yếu tố tăng nhanh nhất trong vòng hơn 2 năm trở lại đây</div>
+      <div class="news-summary">PMI ngành sản xuất Việt Nam tăng lên 53,3 điểm trong tháng 8, một yếu tố tăng nhanh nhất trong vòng hơn 2 năm trở lại đây</div>
+      <div class="news-card-bottom">
+        <span class="source">CafeF - Vi mo</span>
+        
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://cafef.vn/mot-doanh-nghiep-kcn-sap-dua-2-du-an-moi-vao-khai-thac-loi-nhuan-rong-ca-nam-co-the-dat-2000-ty-dong-188260902222641382.chn" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Một doanh nghiệp KCN sắp đưa 2 dự án mới vào khai thác, lợi nhuận ròng cả năm có thể đạt 2.000 tỷ đồng</div>
+      <div class="news-summary">Một doanh nghiệp KCN sắp đưa 2 dự án mới vào khai thác, lợi nhuận ròng cả năm có thể đạt 2.000 tỷ đồng</div>
+      <div class="news-card-bottom">
+        <span class="source">CafeF - Chung khoan</span>
+        <span class="ticker-chip">KCN</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://cafef.vn/gia-vang-bac-hom-nay-3-9-sjc-phu-quy-bao-tin-manh-hai-doji-dong-loat-giam-188260903095119743.chn" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Tin doanh nghiep</span>
+        <span class="sent-chip" style="color:#9aa5a3">Trung tinh</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Giá vàng bạc hôm nay 3/9: SJC, Phú Quý, Bảo Tín Mạnh Hải, DOJI đồng loạt giảm</div>
+      <div class="news-summary">Giá vàng bạc hôm nay 3/9: SJC, Phú Quý, Bảo Tín Mạnh Hải, DOJI đồng loạt giảm</div>
+      <div class="news-card-bottom">
+        <span class="source">CafeF - Chung khoan</span>
+        <span class="ticker-chip">SJC</span>
+      </div>
+    </a>
+    
+    <a class="news-card" href="https://cafef.vn/vi-sao-ha-lan-chuyen-86-tan-vang-sang-anh-188260903102406004.chn" target="_blank" rel="noopener">
+      <div class="news-card-top">
+        <span class="cat-chip">Dia chinh tri</span>
+        <span class="sent-chip" style="color:#e5484d">Tieu cuc</span>
+        <span class="region-chip">VN</span>
+        <span class="time-ago">0 phut truoc</span>
+      </div>
+      <div class="news-title">Vì sao Hà Lan chuyển 86 tấn vàng sang Anh?</div>
+      <div class="news-summary">Vì sao Hà Lan chuyển 86 tấn vàng sang Anh?</div>
+      <div class="news-card-bottom">
+        <span class="source">CafeF - Chung khoan</span>
+        
+      </div>
+    </a>
+    
+  </div>
+
+</body>
+</html>

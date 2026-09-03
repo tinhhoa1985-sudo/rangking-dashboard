@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Lịch sử thị trường VN30</title>
+<style>
+  :root {
+    --jade-900: #0a2420; --jade-800: #0f3d3e; --gold: #d4af37; --gold-soft: #e8cf7a;
+    --text-main: #eef3f1; --text-muted: #9aa5a3; --border: rgba(212,175,55,0.18);
+  }
+  body {
+    margin:0; background: linear-gradient(160deg, var(--jade-900), var(--jade-800) 70%);
+    color: var(--text-main); font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding: 32px 24px 64px;
+  }
+  h1 { color: var(--gold-soft); font-size: 22px; max-width: 1000px; margin: 0 auto 20px; }
+  .card {
+    max-width: 1000px; margin: 0 auto 24px; background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--gold-soft); font-weight: 600; font-size: 12px; }
+  .label { color: var(--text-muted); font-size: 12px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+  <h1>Lịch sử thị trường · Xu hướng theo ngày</h1>
+
+  <div class="card">
+    <div class="label">Xu hướng hiệu suất trung vị 3 tháng toàn rổ (%)</div>
+    <div style="color:#9aa5a3;font-size:12px;">Chưa đủ dữ liệu (cần ít nhất 2 ngày).</div>
+  </div>
+
+  <div class="card">
+    <table>
+      <tr>
+        <th>Ngày</th><th>Regime</th><th>Hiệu suất TV 3T</th>
+        <th>PRIMARY</th><th>Watchlist B+C</th><th>TRÁNH</th><th>Mã PRIMARY</th>
+        <th>Nhận định tin tức (24h)</th><th>Tin theo mã PRIMARY/Watchlist</th>
+      </tr>
+      
+        <tr>
+          <td>2026-09-03</td>
+          <td>bull</td>
+          <td>-4.17%</td>
+          <td>0</td>
+          <td>8</td>
+          <td>8</td>
+          <td style="font-size:12px;color:#9aa5a3;">-</td>
+          <td style="font-size:12px;color:#eef3f1;max-width:260px;">35 tin (3 tích cực / 4 tiêu cực / 28 trung tính), chủ đề nhiều nhất: tin doanh nghiệp. Tổng thể nghiêng tiêu cực nhẹ.</td>
+          <td style="font-size:12px;color:#e8cf7a;max-width:280px;">Không tìm thấy tin riêng cho FPT, SHB, TLG, GMD, DHC, BSR, TCB, PVP trong 5 ngày gần nhất.</td>
+        </tr>
+        
+    </table>
+  </div>
+</body>
+</html>
